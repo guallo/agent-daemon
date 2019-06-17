@@ -60,6 +60,8 @@ class Agent:
                     'AGENT_PID': str(multiprocessing.current_process().pid),
                     'JOB_PIDS_FILE': self._job_pids_file,
                 }
+                if job_data['extra_env'] is not None:
+                    extra_env.update(job_data['extra_env'])
                 
                 job = Job(job_data['uuid'], job_data['cmd'], job_data['dir'], 
                             job_data['user'], job_data['b64payload'], extra_env)
