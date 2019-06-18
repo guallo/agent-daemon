@@ -9,11 +9,11 @@ import multiprocessing
 
 
 class Job(multiprocessing.Process):
-    def __init__(self, uuid, cmd, dir_=None, user=None, b64payload=None, extra_env=None):
+    def __init__(self, uuid, cmd, directory=None, user=None, b64payload=None, extra_env=None):
         super().__init__()
         self._uuid = uuid
         self._cmd = cmd
-        self._dir = dir_
+        self._directory = directory
         self._user = user
         self._b64payload = b64payload
         self._extra_env = extra_env
@@ -22,8 +22,8 @@ class Job(multiprocessing.Process):
         if self._extra_env is not None:
             os.environ.update(self._extra_env)
         
-        if self._dir is not None:
-            os.chdir(self._dir)
+        if self._directory is not None:
+            os.chdir(self._directory)
         
         if self._b64payload is not None:
             payload = base64.b64decode(self._b64payload)
@@ -63,7 +63,7 @@ class Agent:
                 if job_data['extra_env'] is not None:
                     extra_env.update(job_data['extra_env'])
                 
-                job = Job(job_data['uuid'], job_data['cmd'], job_data['dir'], 
+                job = Job(job_data['uuid'], job_data['cmd'], job_data['directory'], 
                             job_data['user'], job_data['b64payload'], extra_env)
                 job.start()
                 
