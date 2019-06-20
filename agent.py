@@ -2,6 +2,7 @@
 
 import os
 import time
+import json
 import base64
 import argparse
 import requests
@@ -55,16 +56,20 @@ class Agent:
             jobs_data = r.json()
             
             for job_data in jobs_data:
+                uuid = job_data['uuid']
+                cmd = job_data['cmd']
+                directory = job_data['directory'] or None
+                user = job_data['user'] or None
+                b64payload = job_data['b64payload'] or None
                 extra_env = {
-                    'JOB_UUID': job_data['uuid'],
+                    'JOB_UUID': uuid,
                     'AGENT_PID': str(multiprocessing.current_process().pid),
                     'JOB_PIDS_FILE': self._job_pids_file,
                 }
-                if job_data['extra_env'] is not None:
-                    extra_env.update(job_data['extra_env'])
+                if job_data['extra_env_json']:
+                    extra_env.update(json.loads(job_data['extra_env_json']))
                 
-                job = Job(job_data['uuid'], job_data['cmd'], job_data['directory'], 
-                            job_data['user'], job_data['b64payload'], extra_env)
+                job = Job(uuid, cmd, directory, user, b64payload, extra_env)
                 job.start()
                 
                 open(self._job_pids_file, 'ab').write(f'{job.pid}{os.linesep}'.encode('utf-8'))
