@@ -6,4 +6,4 @@
 ./agent.sh --jobs-server-cert-file -Mlocalhost.pem --jobs-endpoint https://localhost:8443/api/jobs/ --api-key-file -Mapi-key --job-pids-file job-pids --pull-every-secs 5
 ```
 
-notice how we prepended an `-M` to the file path `localhost.pem`; that is to bind-mount that local file into the docker container.
+Notice how we prepended an `-M` to the file paths `localhost.pem` and `api-key`; that is used to reference local files that we want to bind-mount into the container. Conversely the `job-pids` file path, makes only reference to that file into the container.
