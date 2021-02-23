@@ -1,14 +1,9 @@
 # agent-daemon
 
-To run the `agent` into a docker container:
+## Using agent.sh to run the agent into a docker container
 
 ```bash
-./agent.sh [AGENT_ARG]...
+./agent.sh --jobs-server-cert-file -Mlocalhost.pem --jobs-endpoint https://localhost:8443/api/jobs/ --api-key-file -Mapi-key --job-pids-file job-pids --pull-every-secs 5
 ```
 
-In case you want to bind-mount a local file into the docker container
-just prepend an `-M` to the file path, for example:
-
-```bash
-./agent.sh --jobs-server-cert-file "-Mcerts/server.pem" [AGENT_ARG]...
-```
+notice how we prepended an `-M` to the file path `localhost.pem`; that is to bind-mount that local file into the docker container.
